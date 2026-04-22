@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field, asdict
-from app.experiment import Experiment
+from experiment import Experiment
 from typing import List
 import json
 

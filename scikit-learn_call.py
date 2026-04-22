@@ -4,8 +4,8 @@ from sklearn.model_selection import train_test_split
 from ML_Experiment_Logger.ETL_Titanic_DataSet import run_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
-from experiment import Experiment
-from ExperimentLogger import  ExperimentLogger
+from app.experiment import Experiment
+from app.ExperimentLogger import  ExperimentLogger
 
 df = run_pipeline()
 

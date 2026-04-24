@@ -1,0 +1,26 @@
+#API version and kind
+apiVersion: apps/v1
+kind: Deployment
+
+#Metadata
+
+metadata:
+  name: ml-experiment-logger
+
+#Spec
+spec:
+  replicas : 1
+  selector:
+    matchLabels:
+      app: ml-experiment-logger
+  template:
+    metadata:
+      labels:
+        app: ml-experiment-logger
+    spec:
+      containers:
+        - name: ml-experiment-logger
+          image: ml-experiment-logger:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000

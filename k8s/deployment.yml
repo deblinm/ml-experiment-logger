@@ -36,3 +36,10 @@ spec:
               port: 8000
             initialDelaySeconds: 5
             periodSeconds: 10
+          volumeMounts:
+            - name: experiment-storage
+              mountPath: /app/data
+      volumes:
+        - name: experiment-storage
+          persistentVolumeClaim:
+            claimName: ml-experiment-pvc

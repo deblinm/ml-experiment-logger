@@ -82,6 +82,10 @@ def get_experiment_by_id (exp_id: str):
                 return {"message": f"No experiment found with id {exp_id}"}
         return asdict(match)
 
+@app.get("/health")
+def get_health_check_status_For_kubernetes():
+        return {"status": "healthy"}
+
 
 @app.delete("/experiments/{exp_id}")
 def del_experiment(exp_id: str):

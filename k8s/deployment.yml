@@ -17,6 +17,10 @@ spec:
     metadata:
       labels:
         app: ml-experiment-logger
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8000"
     spec:
       containers:
         - name: ml-experiment-logger

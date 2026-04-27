@@ -4,9 +4,11 @@ from dataclasses import asdict
 from pydantic import BaseModel
 from datetime import date
 from experiment import Experiment
+from prometheus_fastapi_instrumentator import Instrumentator
 
 EL_OBJ = EL()
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 
 try:
     EL_OBJ.experiments = EL_OBJ.load_from_file()

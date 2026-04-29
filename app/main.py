@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from datetime import date
 from experiment import Experiment
 from prometheus_fastapi_instrumentator import Instrumentator
+import pandas as pd
 
 EL_OBJ = EL()
 app = FastAPI()
@@ -87,6 +88,42 @@ def get_experiment_by_id (exp_id: str):
 @app.get("/health")
 def get_health_check_status_For_kubernetes():
         return {"status": "healthy"}
+
+@app.get("/drift_report")
+def get_drift_report():
+        if len(EL_OBJ.experiments) < 2:
+                return {"message": "Need at least 2 experiments to generate a drift report"}
+
+        reference = EL_OBJ.experiments[0].model_metrics
+        current_experiments = [exp.model_metrics for exp in EL_OBJ.experiments[1:]]
+        current_df = pd.DataFrame(current_experiments)
+
+        drift_results = {}
+        drift_detected = False
+
+        for metric in reference:
+                if metric in current_df.columns:
+                        ref_value = reference[metric]
+                        current_mean = current_df[metric].mean()
+                        change_pct = abs(current_mean - ref_value) / ref_value * 100
+                        drifted = bool(change_pct > 10)
+                        if drifted:
+                                drift_detected = True
+                        drift_results[metric] = {
+                                "reference_value": ref_value,
+                                "current_mean": round(current_mean, 4),
+                                "change_percent": round(change_pct, 2),
+                                "drifted": drifted
+                        }
+
+        return {
+                "drift_detected": drift_detected,
+                "total_experiments_analysed": len(EL_OBJ.experiments),
+                "reference_experiment_id": EL_OBJ.experiments[0].id,
+                "metrics": drift_results
+        }
+
+
 
 
 @app.delete("/experiments/{exp_id}")

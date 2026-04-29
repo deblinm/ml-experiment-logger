@@ -1,4 +1,4 @@
-# ML Experiment Logger
+# ML Experiment Logger — MLOps & SRE Portfolio Project
 
 A Python application to log, track and compare 
 machine learning experiments — built as a 
